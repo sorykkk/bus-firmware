@@ -1,0 +1,55 @@
+{
+    "default": "normal",
+    "defaults": {
+        "cruise_kmh": 18,
+        "accel_mps2": 1.0,
+        "decel_mps2": 1.3,
+        "dwell_s": 15,
+        "time_scale": 1,
+        "gps_jitter_m": 0,
+        "loop": true,
+        "autostart": true,
+        "start_stop": 0
+    },
+    "scenarios": [
+        {
+            "name": "normal",
+            "description": "Regular service, stops everywhere (cruise speed calibrated on the real weekday timetable)"
+        },
+        {
+            "name": "demo_fast",
+            "description": "10x time for live demos: a full lap in a few minutes",
+            "time_scale": 10,
+            "dwell_s": 20
+        },
+        {
+            "name": "rush_hour",
+            "description": "Traffic jam between Complexul Studențesc (BRD) and Hector (Bastion), long boarding times",
+            "dwell_s": 40,
+            "slow_zones": [ { "from_m": 5575, "to_m": 6573, "kmh": 6 } ]
+        },
+        {
+            "name": "express",
+            "description": "Skips Sala C. Jude (Ripensia) and Piața Consiliul Europei (Calea Aradului)",
+            "cruise_kmh": 30,
+            "skip_stops": [ "Sala C. Jude (Ripensia)", "Piața Consiliul Europei (Calea Aradului)" ]
+        },
+        {
+            "name": "tunnel",
+            "description": "GPS fix lost for 400 m: the server must cope with fix_ok=false",
+            "gps_dropouts": [ { "from_m": 15676, "to_m": 16076 } ]
+        },
+        {
+            "name": "noisy_gps",
+            "description": "Urban canyon: +-12 m position noise",
+            "gps_jitter_m": 12
+        },
+        {
+            "name": "one_lap",
+            "description": "Starts at Stuparilor, does one lap and parks there (end of shift)",
+            "start_stop": 20,
+            "loop": false,
+            "autostart": false
+        }
+    ]
+}
