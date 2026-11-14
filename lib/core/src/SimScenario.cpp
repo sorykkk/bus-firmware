@@ -1,5 +1,6 @@
 #include "SimScenario.h"
 #include <ArduinoJson.h>
+#include <utility>
 
 static bool fail(std::string *err, const std::string &msg) {
     if(err)
@@ -25,6 +26,7 @@ bool parseRouteJson(const std::string &json, Route &out, std::string *err) {
     r.name = (const char *)(doc["name"] | "");
     JsonArrayConst pts = doc["points"].is<JsonArrayConst>() ? doc["points"].as<JsonArrayConst>()
                                                              : doc["route"].as<JsonArrayConst>();
+    r.points.reserve(pts.size());
     for(JsonObjectConst p : pts) {
         if(!p["lat"].is<double>() || !p["lon"].is<double>())
             return fail(err, "route json: every point needs numeric lat and lon");
@@ -36,7 +38,7 @@ bool parseRouteJson(const std::string &json, Route &out, std::string *err) {
     }
     if(r.points.size() < 2)
         return fail(err, "route json: needs at least 2 points");
-    out = r;
+    out = std::move(r);
     return true;
 }
 

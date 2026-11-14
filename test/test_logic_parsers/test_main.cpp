@@ -87,6 +87,21 @@ void test_route_json() {
     TEST_ASSERT_FALSE(parseRouteJson("{ broken", r, &err));
 }
 
+void test_large_route_json() {
+    std::string json = "{\"points\":[";
+    for(size_t i = 0; i < 632; i++) {
+        if(i)
+            json += ',';
+        json += "{\"lat\":45.75,\"lon\":21.22}";
+    }
+    json += "]}";
+
+    Route route;
+    std::string err;
+    TEST_ASSERT_TRUE_MESSAGE(parseRouteJson(json, route, &err), err.c_str());
+    TEST_ASSERT_EQUAL(632, route.points.size());
+}
+
 static const char *kScenarios = R"({
   "default": "rush",
   "defaults": {"cruise_kmh": 30, "dwell_s": 15, "loop": true},
@@ -243,6 +258,7 @@ int main() {
     RUN_TEST(test_dotenv);
     RUN_TEST(test_dotenv_duplicate_and_crlf);
     RUN_TEST(test_route_json);
+    RUN_TEST(test_large_route_json);
     RUN_TEST(test_route_alias_and_rejections);
     RUN_TEST(test_scenarios_json);
     RUN_TEST(test_beacon_frame);
