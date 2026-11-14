@@ -185,7 +185,7 @@ def latest_frame(bus_id):
 def dash():
     rows = ""
     now = time.time()
-    for b in sorted(set(latest.items()) | set(frames)):
+    for b in sorted(set(latest) | set(frames)):
         img = (f"<td><img src='/api/v1/buses/{b}/frames/latest.jpg?t={now:.0f}' height=90 "
                "onerror=\"this.style.display='none'\"></td></tr>")
         d = latest.get(b)
